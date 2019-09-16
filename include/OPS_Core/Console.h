@@ -34,7 +34,7 @@ protected:
 	Console(const std::string& modName, bool needLogging = true);
 	std::string m_modName;
 	bool m_needLogging;
-	friend Console& getOutputConsole(const std::string& modName, bool needLogging = true);
+	friend Console& getOutputConsole(const std::string& modName, bool needLogging);
 };
 
 /// Получить манипулятор для вывода на консоль

@@ -59,9 +59,9 @@ int main(int nArgC, char* apszArgV[])
 		// Генерация кода
 
 		cout << "Code generation started..." << endl;
-		clang::IntrusiveRefCntPtr <clang::TargetOptions> ptrTargetOptions(
-			new clang::TargetOptions);
-		ptrTargetOptions->Triple = "i386-pc-win32-eabi";
+		//TODO: make ptrTargetOptions a smart ptr, otherwise this is a memory leak
+		clang::TargetOptions* ptrTargetOptions = new clang::TargetOptions;
+		//ptrTargetOptions->Triple = "i386-pc-win32-eabi";
 		Generator generator(*ptrTargetOptions);
 		ArgumentValues argValues;
 		generator.makeTransform(&(frontend.getProgramUnit()), argValues);

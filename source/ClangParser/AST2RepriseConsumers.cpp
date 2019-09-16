@@ -193,7 +193,7 @@ namespace OPS
             {
                 double result = 0.0;
                 bool dummy = false;
-                llvm::APFloat::opStatus convertStatus = floatValue.convert(llvm::APFloat::IEEEdouble, llvm::APFloat::rmNearestTiesToEven, &dummy);
+                llvm::APFloat::opStatus convertStatus = floatValue.convert(llvm::APFloat::IEEEdouble(), llvm::APFloat::rmNearestTiesToEven, &dummy);
                 // TODO: Проверить, что llvm::APFloat::opInexact не сильно портит исходную константу.
                 // Или использовать константу только, если convertStatus == llvm::APFloat::opOK
                 if (convertStatus == llvm::APFloat::opOK || convertStatus == llvm::APFloat::opInexact)
@@ -356,7 +356,7 @@ namespace OPS
 						{
 							llvm::APFloat& floatValue = evalResult.Val.getFloat();
 							bool dummy = false;
-							llvm::APFloat::opStatus convertStatus = floatValue.convert(llvm::APFloat::IEEEdouble, llvm::APFloat::rmNearestTiesToEven, &dummy);
+							llvm::APFloat::opStatus convertStatus = floatValue.convert(llvm::APFloat::IEEEdouble(), llvm::APFloat::rmNearestTiesToEven, &dummy);
 							// TODO: Проверить, что llvm::APFloat::opInexact не сильно портит исходную константу. Или использовать константу только, если convertStatus == llvm::APFloat::opOK
 							simplifiedExpr.reset(OPS::Reprise::StrictLiteralExpression::createFloat64(convertToDoubleSafe(floatValue)));
 						}
@@ -738,14 +738,14 @@ namespace OPS
 						/// type.
 						const clang::FunctionProtoType& protoFunc = static_cast<const clang::FunctionProtoType&>(type);
 
-                        ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(protoFunc.getResultType());
+                        ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(protoFunc.getReturnType());
 						std::unique_ptr<OPS::Reprise::SubroutineType> repriseProtoFunc(new OPS::Reprise::SubroutineType(returnType.get()));
 
 						// Add subproc params
-						const unsigned int paramCount = protoFunc.getNumArgs();
+						const unsigned int paramCount = protoFunc.getNumParams();
 						for(unsigned int paramIndex = 0; paramIndex < paramCount; ++paramIndex)
 						{
-                            ReprisePtr<OPS::Reprise::TypeBase> paramType = convertQualType(protoFunc.getArgType(paramIndex));
+                            ReprisePtr<OPS::Reprise::TypeBase> paramType = convertQualType(protoFunc.getParamType(paramIndex));
 							std::unique_ptr<OPS::Reprise::ParameterDescriptor> paramDescriptor(new OPS::Reprise::ParameterDescriptor("", paramType.get()));
 							repriseProtoFunc->addParameter(paramDescriptor.get());
 							// Release auto_ptrs
@@ -762,7 +762,7 @@ namespace OPS
 						/// FunctionNoProtoType - Represents a K&R-style 'int foo()' function, which has
 						/// no information available about its arguments.
 						const clang::FunctionNoProtoType& protoFunc = static_cast<const clang::FunctionNoProtoType&>(type);
-                        ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(protoFunc.getResultType());
+                        ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(protoFunc.getReturnType());
 						std::unique_ptr<OPS::Reprise::SubroutineType> repriseProtoFunc(new OPS::Reprise::SubroutineType(returnType.get()));
 						repriseProtoFunc->setArgsKnown(false);
 						result.reset(repriseProtoFunc.release());
@@ -1014,7 +1014,7 @@ namespace OPS
 				const std::string name = getIdentifierName(decl);
                 ReprisePtr<OPS::Reprise::TypeBase> varType = convertQualType(decl.getType());
 				OPS::Reprise::VariableDeclarators declarators;
-				const clang::VarDecl::StorageClass storageClass = decl.getStorageClass();
+				const clang::StorageClass storageClass = decl.getStorageClass();
 				switch(storageClass)
 				{
 				case clang::SC_Register: declarators.set(OPS::Reprise::VariableDeclarators::DECL_REGISTER); break;
@@ -1151,7 +1151,7 @@ namespace OPS
 				}
 
 				const std::string name = getIdentifierName(decl);
-                ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(decl.getResultType());
+                ReprisePtr<OPS::Reprise::TypeBase> returnType = convertQualType(decl.getReturnType());
 				ReprisePtr<OPS::Reprise::SubroutineType> subrType(new OPS::Reprise::SubroutineType(returnType.get()));
 				if (decl.hasPrototype())
 				{
@@ -2446,8 +2446,9 @@ namespace OPS
                     // TODO: (zzz) remove the block as debug only
                     if (m_outputStream != 0)
                     {
-                        PrintingPolicy policy = astContext.getPrintingPolicy();
-                        policy.SuppressTag = false;
+                        PrintingPolicy policy = astContext.getPrintingPolicy();\
+						// TODO: find SuppressTag in clang 5
+                        // policy.SuppressTag = false;
                         policy.SuppressScope = false;
                         // Print AST dump to the console
                         astContext.getTranslationUnitDecl()->print(*m_outputStream, policy);

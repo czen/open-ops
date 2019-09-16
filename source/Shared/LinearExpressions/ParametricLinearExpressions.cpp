@@ -248,7 +248,7 @@ ParametricLinearExpression::ParametricLinearExpression(VariablesDeclarationsVect
 				SymbolicDescription* occur = SymbolicDescription::createSymbolicDescription(*tempSummand);
 				if (!occur)
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression"); 
+					OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true); 
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected ReferenceExpression: "+oneSummand->dumpState()+".",""));
 					clear();
 					return;
@@ -707,7 +707,7 @@ ParametricLinearExpression& ParametricLinearExpression::add(const ReferenceExpre
 	ReprisePtr<SymbolicDescription> temp(SymbolicDescription::createSymbolicDescription(*tempSummand)); 
 	if (!temp.get())
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression"); 
+		OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true); 
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected ReferenceExpression: "+summand.dumpState()+".",""));
 		clear();
 		return *this;
@@ -816,7 +816,7 @@ void ParametricLinearExpression::multiplyUnsafe(const ExpressionBase& multiplier
 	// Проверка
 	if ((OperationKind != BasicCallExpression::BCK_MULTIPLY) && (OperationKind != BasicCallExpression::BCK_DIVISION))
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression");
+		OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Not supported operation in multiplyUnsafe()!",""));
 		return;
 	}

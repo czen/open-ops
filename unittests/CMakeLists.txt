@@ -28,7 +28,8 @@ ops_project(
     ../include/GTestIncludeWrapper.h
     FrontendHelper.h
   LIBRARIES
-    ClangRepriseClang
+    # 21.08.19 ClangInjection and ClangRepriseClang broken under Clang 5, turned off temporarily
+    # ClangRepriseClang
     OPSCoreSystem
   TEMPLATES
     GTest

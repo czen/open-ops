@@ -179,14 +179,14 @@ bool ExpressionsGraph<ExpressionsGraphNode, ExpressionsGraphDirEdge>::parseAssig
 			}
 			else 
 			{
-				OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName);
+				OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName, true);
 				pConsole->log(OPS::Console::LEVEL_ERROR, "Not an assign operator will not be parsed to graph!");
 				return true; // TODO: разобраться почему истина?
 			}
 		}
 		else
 		{
-			OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName);
+			OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName, true);
 			pConsole->log(OPS::Console::LEVEL_ERROR, "Not an assign operator will not be parsed to graph!");
 			return true; // TODO: разобраться почему истина?
 		}
@@ -364,7 +364,7 @@ bool ExpressionsGraph<ExpressionsGraphNode, ExpressionsGraphDirEdge>::parseExpre
 					}
 				default:
 					{
-						OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName);
+						OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName, true);
 						pConsole->log(OPS::Console::LEVEL_ERROR, "During CalculationGraph construction BasicCallExpression node of unexpected kind was found!");
 						return false;
 					}
@@ -374,7 +374,7 @@ bool ExpressionsGraph<ExpressionsGraphNode, ExpressionsGraphDirEdge>::parseExpre
 		}
 		else
 		{
-			OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName);
+			OPS::Console* const pConsole = &OPS::getOutputConsole(m_strGraphName, true);
 			pConsole->log(OPS::Console::LEVEL_ERROR, "During CalculationGraph construction ExpressionBase node of unexpected type was found!");
 			return false;
 		}

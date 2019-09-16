@@ -253,7 +253,7 @@ bool CalculationGraphBuilder::glueNodesAfterFlowDependency(int from, int to, con
 
 	if (inEdgeCount != 1)
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect number of DirEdges sink to generator " + pGeneratorNode->getStringRepresentation() + "!",""));
 		return false;
 	}
@@ -269,7 +269,7 @@ bool CalculationGraphBuilder::glueNodesAfterFlowDependency(int from, int to, con
 	// Проверка корректности
 	if (pUseNode->m_InDirEdges.size() != 0)
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Too many DirEdges sink to use!",""));
 		return false;
 	}

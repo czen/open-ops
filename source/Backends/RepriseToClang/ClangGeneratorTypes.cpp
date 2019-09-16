@@ -54,8 +54,9 @@ ASTContextParams::ASTContextParams(
 
 	// 3. TargetInfo
 
+    // TODO: pass shared_ptr into ASTContextParams(..)?
 	m_PTargetInfo =
-		clang::TargetInfo::CreateTargetInfo(*m_PDiagEngine, &rTargetOptions);
+		clang::TargetInfo::CreateTargetInfo(*m_PDiagEngine, std::shared_ptr<clang::TargetOptions>(&rTargetOptions));
 
 	// 4. IdentifierTable
 
@@ -117,14 +118,16 @@ void ASTContextParams::initialize(
 
 clang::ASTContext* ASTContextParams::createASTContext()
 {
+
 	clang::ASTContext* pASTContext = new clang::ASTContext(
 		*m_PLangOptions,
 		*m_PSourceManager,
-		&*m_PTargetInfo,
+		//&*m_PTargetInfo,
 		*m_PIdTable,
 		*m_PSelectorTable,
-		*m_PBuiltinContext,
-		100000);
+		*m_PBuiltinContext
+		//100000
+		);
 
 	return pASTContext;
 }

@@ -160,7 +160,7 @@ ExpressionBase* addWithEvaluating(const LiteralExpression* firstArg, const Liter
 			case BasicType::BT_CHAR: //TODO: данные какого типа при сложении дают такой результат?
 			default: // BasicType::BT_VOID, BasicType::BT_UNDEFINED - попадают в эту ветку 
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected adding result type found!",""));
 					return 0;
 				}
@@ -205,7 +205,7 @@ ExpressionBase* addWithEvaluating(const LiteralExpression* firstArg, const Liter
 					//return BasicLiteralExpression::createWideString(Strings::format(L"%C", firstArgBasic->getWideChar() + secondArgBasic->getWideChar()));
 			default:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected subtraction result type found!",""));
 					return 0;
 				}
@@ -216,7 +216,7 @@ ExpressionBase* addWithEvaluating(const LiteralExpression* firstArg, const Liter
 	//3. Сложение составных типов не поддерживается
 	if (firstArg->cast_ptr<CompoundLiteralExpression>() || secondArg->cast_ptr<CompoundLiteralExpression>())
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect semantics of adding operation found!",""));
 		return 0;
 	}
@@ -277,7 +277,7 @@ ExpressionBase* subtractWithEvaluating(const LiteralExpression* firstArg, const 
 				case BasicType::BT_WIDE_STRING:
 				default: // BasicType::BT_VOID, BasicType::BT_UNDEFINED - попадают в эту ветку 
 					{
-						OPS::Console* const pConsole = &OPS::getOutputConsole("subtractWithEvaluating(...)");
+						OPS::Console* const pConsole = &OPS::getOutputConsole("subtractWithEvaluating(...)", true);
 						pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected subtraction result type found!",""));
 						return 0;
 					}
@@ -318,7 +318,7 @@ ExpressionBase* subtractWithEvaluating(const LiteralExpression* firstArg, const 
 			case BasicLiteralExpression::LT_WIDE_STRING:
 			default:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("subtractWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("subtractWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected subtraction result type found!",""));
 					return 0;
 				}
@@ -329,7 +329,7 @@ ExpressionBase* subtractWithEvaluating(const LiteralExpression* firstArg, const 
 	//3. Сложение составных типов не поддерживается
 	if (firstArg->cast_ptr<CompoundLiteralExpression>() || secondArg->cast_ptr<CompoundLiteralExpression>())
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect semantics of adding operation found!",""));
 		return 0;
 	}
@@ -388,7 +388,7 @@ ExpressionBase* multiplyWithEvaluating(const LiteralExpression* firstArg, const 
 			case BasicType::BT_STRING:
 			case BasicType::BT_WIDE_STRING:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Illegal use of binary '*' operator!",""));
 					return 0;
 				}
@@ -396,7 +396,7 @@ ExpressionBase* multiplyWithEvaluating(const LiteralExpression* firstArg, const 
 			case BasicType::BT_CHAR: //TODO: данные какого типа при сложении дают такой результат?
 			default: // BasicType::BT_VOID, BasicType::BT_UNDEFINED - попадают в эту ветку 
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected adding result type found!",""));
 					return 0;
 				}
@@ -442,7 +442,7 @@ ExpressionBase* multiplyWithEvaluating(const LiteralExpression* firstArg, const 
 			case BasicLiteralExpression::LT_WIDE_STRING:
 			case BasicLiteralExpression::LT_STRING:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Illegal use of binary '*' operator (string arguments)!",""));
 					return 0;
 				}
@@ -455,7 +455,7 @@ ExpressionBase* multiplyWithEvaluating(const LiteralExpression* firstArg, const 
     //3. Умножение составных типов не поддерживается по стандарту if С99
 	if (firstArg->cast_ptr<CompoundLiteralExpression>() || secondArg->cast_ptr<CompoundLiteralExpression>())
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)");
+		OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)", true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect semantics of adding operation found!",""));
 		return 0;
 	}
@@ -595,7 +595,7 @@ ExpressionBase* divideWithEvaluating(const LiteralExpression* firstArg, const Li
 			case BasicType::BT_STRING:
 			case BasicType::BT_WIDE_STRING:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("divideWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("divideWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Illegal use of binary '/' operator (string arguments)!",""));
 					return 0;
 				}
@@ -603,7 +603,7 @@ ExpressionBase* divideWithEvaluating(const LiteralExpression* firstArg, const Li
 			case BasicType::BT_CHAR: //TODO: данные какого типа при сложении дают такой результат?
 			default: // BasicType::BT_VOID, BasicType::BT_UNDEFINED - попадают в эту ветку 
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Unexpected adding result type found!",""));
 					return 0;
 				}
@@ -661,7 +661,7 @@ ExpressionBase* divideWithEvaluating(const LiteralExpression* firstArg, const Li
 			case BasicLiteralExpression::LT_WIDE_STRING:
 			case BasicLiteralExpression::LT_STRING:
 				{
-					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)");
+					OPS::Console* const pConsole = &OPS::getOutputConsole("multiplyWithEvaluating(...)", true);
 					pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Illegal use of binary '*' operator!",""));
 					return 0;
 				}
@@ -677,7 +677,7 @@ ExpressionBase* divideWithEvaluating(const LiteralExpression* firstArg, const Li
 	//3. Деление составных типов не поддерживается по стандарту С99
 	if (firstArg->cast_ptr<CompoundLiteralExpression>() || secondArg->cast_ptr<CompoundLiteralExpression>())
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)");
+		OPS::Console* const pConsole = &OPS::getOutputConsole("addWithEvaluating(...)", true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect semantics of adding operation found!",""));
 		return 0;
 	}
@@ -712,7 +712,7 @@ Reprise::ExpressionBase* getOpposite(const Reprise::LiteralExpression* arg)
 			}
 		default:
 			{
-				OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression");
+				OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true);
 				pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect multiplication operation!",""));
 				throw RuntimeError("Incorrect multiplication operation!");
 			}
@@ -757,7 +757,7 @@ Reprise::ExpressionBase* getOpposite(const Reprise::LiteralExpression* arg)
 		case BasicType::BT_UINT8:
 		default:				
 			{
-				OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression");
+				OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true);
 				pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Incorrect multiplication operation!",""));
 				throw RuntimeError("Incorrect multiplication operation!");
 			}

@@ -100,7 +100,7 @@ void OPS::Backends::Clang::Internal::ClangWalker::visit(
 	clang::QualType qualType = getClangQualType(
 		rVariableDeclaration.getType());
 
-	clang::VarDecl::StorageClass storageWritten =
+	clang::StorageClass storageWritten =
 		getClangStorageClass(rVariableDeclaration.getDeclarators());
 	
 	// Not used since clang 3.3
@@ -217,7 +217,7 @@ void OPS::Backends::Clang::Internal::ClangWalker::visit(
 	clang::QualType qualType = getClangQualType(
 		rSubroutineType);
 
-	clang::FunctionDecl::StorageClass storageWritten =
+	clang::StorageClass storageWritten =
 		getClangStorageClass(rSubroutineDeclaration.getDeclarators());
 	
 	// Not used since clang 3.3
@@ -255,9 +255,9 @@ void OPS::Backends::Clang::Internal::ClangWalker::visit(
 		clang::IdentifierInfo* pIdentifierInfo = getIdentifierInfo(
 			m_rGeneratedProgram, rcParameterDescriptor.getName());
 		clang::QualType argQualType =
-			pcFunctionProtoType->getArgType(static_cast <unsigned> (i));
+			pcFunctionProtoType->getParamType(static_cast <unsigned> (i));
 
-		clang::VarDecl::StorageClass storageWritten = clang::SC_None;
+		clang::StorageClass storageWritten = clang::SC_None;
 		if (rcParameterDescriptor.hasAssociatedVariable())
 			storageWritten = getClangStorageClass(
 				rcParameterDescriptor.getAssociatedVariable().getDeclarators());

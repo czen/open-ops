@@ -23,6 +23,7 @@ clang 2.7
 #include "clang/AST/DeclGroup.h"
 #include "clang/AST/ExternalASTSource.h"
 #include "clang/Parse/Parser.h"
+#include "clang/Lex/PreprocessorOptions.h"
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/Lex/MacroInfo.h"
 #include "clang/Lex/LexDiagnostic.h"
@@ -32,12 +33,12 @@ clang 2.7
 #include "clang/Basic/TargetInfo.h"
 #include "clang/Basic/Version.h"
 #include "llvm/IR/LLVMContext.h"
-#include "llvm/ADT/OwningPtr.h"
 #include "llvm/ADT/SmallPtrSet.h"
 #include "llvm/ADT/StringExtras.h"
 #include "llvm/ADT/StringMap.h"
 #include "llvm/ADT/STLExtras.h"
-#include "llvm/Config/config.h"
+//TODO: ???
+//#include "llvm/Config/config.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/ManagedStatic.h"
@@ -125,11 +126,11 @@ namespace clang
 	{
 		ASTConsumer *m_astConsumer;
 	protected:
-		virtual ASTConsumer *CreateASTConsumer(CompilerInstance &CI, llvm::StringRef InFile)
+		virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, llvm::StringRef InFile)
 		{
 			OPS_UNUSED(CI)
 			OPS_UNUSED(InFile)
-			return m_astConsumer;
+			return std::unique_ptr<ASTConsumer>(m_astConsumer);
 		}
 	public:
 		ASTConsumeAction(ASTConsumer* consumer): m_astConsumer(consumer)
@@ -160,11 +161,13 @@ namespace clang
             options.C99 = 1; // C99 Support
             options.C11 = 0; // C11
 			options.MicrosoftExt = m_parserSettings.m_compatibilityMode == ClangParserSettings::CM_MICROSOFT; // Microsoft extensions.
-			options.MicrosoftMode = m_parserSettings.m_compatibilityMode == ClangParserSettings::CM_MICROSOFT; // Microsoft compat. mode
+			//TODO: no options.MicrosoftMode
+			//options.MicrosoftMode = m_parserSettings.m_compatibilityMode == ClangParserSettings::CM_MICROSOFT; // Microsoft compat. mode
             options.Borland = 0;  // Borland extensions.
             options.CPlusPlus = 0; // C++ Support
             options.CPlusPlus11 = 0; // C++0x Support
-            options.CPlusPlus1y = 0; // C++1y
+			//TODO: no CPlusPlus1y
+            //options.CPlusPlus1y = 0; // C++1y
             options.ObjC1 = 0; // Objective-C 1 support enabled.
             options.ObjC2 = 0; // Objective-C 2 support enabled.
             options.ObjCDefaultSynthProperties = 0; // Objective-C auto-synthesized properties
@@ -238,9 +241,11 @@ namespace clang
 			FileManager &fileMgr = preprocessor.getFileManager();
 			assert(inFile != "-");
 			const FileEntry *file = fileMgr.getFile(inFile);
+			// TODO: no more createMainFileID
 			if (file) 
 			{
-				sourceMgr.createMainFileID(file);
+				//sourceMgr.createMainFileID(file);
+				sourceMgr.setMainFileID(sourceMgr.createFileID(file, SourceLocation(), SrcMgr::C_User));
 			}
 			if (sourceMgr.getMainFileID().isInvalid()) 
 			{
@@ -254,9 +259,10 @@ namespace clang
 		{
 			// Figure out where to get and map in the main file.
 			SourceManager &sourceMgr = preprocessor.getSourceManager();
-			const llvm::MemoryBuffer* memoryBuffer =
+			std::unique_ptr<llvm::MemoryBuffer> memoryBuffer =
 				llvm::MemoryBuffer::getMemBuffer(source);
-			sourceMgr.createMainFileIDForMemBuffer(memoryBuffer);
+			FileID fileID = sourceMgr.createFileID(std::move(memoryBuffer));
+			sourceMgr.setMainFileID(fileID);
 
 			return false;
 		}
@@ -335,7 +341,8 @@ namespace clang
 			assert(features.empty() && "invalid map"); 
 
 			// Initialize the feature map based on the target.
-            target->getDefaultFeatures(features);
+			// !!!! TODO: convert features into std::vector<std::string>
+            // target->getDefaultFeatures(features);
 
 			// Apply the user specified deltas.
 			for (llvm::cl::list<std::string>::iterator it = TargetFeatures.begin(),  ie = TargetFeatures.end(); it != ie; ++it) 
@@ -348,11 +355,13 @@ namespace clang
 					const std::string msg = std::string("error: clang-cc: invalid target feature string: ") + *it;
 					throw std::runtime_error(msg.c_str());
 				}
-				if (!target->setFeatureEnabled(features, name + 1, (name[0] == '+'))) 
-				{
-					const std::string msg = std::string("error: clang-cc: invalid target feature name: ") + *it;
-					throw std::runtime_error(msg.c_str());
-				}
+				// TODO: control errors from setFeatureEnabled
+				target->setFeatureEnabled(features, name + 1, (name[0] == '+'));
+				// if (!target->setFeatureEnabled(features, name + 1, (name[0] == '+'))) 
+				// {
+				// 	const std::string msg = std::string("error: clang-cc: invalid target feature name: ") + *it;
+				// 	throw std::runtime_error(msg.c_str());
+				// }
 			}
 		}
 
@@ -363,20 +372,24 @@ namespace clang
 			const std::string &inFile, ASTConsumer* consumer,
 			bool useMemoryInput)
 		{
-			llvm::OwningPtr<llvm::raw_ostream> outputStream;
+			std::unique_ptr<llvm::raw_ostream> outputStream;
 			bool clearSourceMgr = false;
-			llvm::OwningPtr<ASTContext> contextOwner;
+			std::unique_ptr<ASTContext> contextOwner;
 			if (consumer)
 			{
-				contextOwner.reset(new ASTContext(langOpts,
+				ASTContext* ctx = new ASTContext(langOpts,
 					preprocessor.getSourceManager(),
-                    &preprocessor.getTargetInfo(),
+					//&preprocessor.getTargetInfo(),
 					preprocessor.getIdentifierTable(),
 					preprocessor.getSelectorTable(),
-					preprocessor.getBuiltinInfo(), 0));
+					preprocessor.getBuiltinInfo()
+					//0
+				);
+			    ctx->InitBuiltinTypes(preprocessor.getTargetInfo());
+				contextOwner.reset(ctx);
 			}
 
-			llvm::OwningPtr<ExternalASTSource> source;
+			std::unique_ptr<ExternalASTSource> source;
 
 			if (useMemoryInput)
 			{
@@ -417,7 +430,8 @@ namespace clang
 					{
 						for(clang::Preprocessor::macro_iterator it = preprocessor.macro_begin();it != preprocessor.macro_end(); ++it)
 						{
-							MacroInfo* macroInfo = it->second->getMacroInfo();
+							const IdentifierInfo* idInfo = it->first;
+							MacroInfo* macroInfo = preprocessor.getMacroInfo(idInfo);
 							if (macroInfo && 
 								!macroInfo->isFunctionLike() && 
 								!macroInfo->isGNUVarargs() && 
@@ -493,7 +507,8 @@ namespace clang
                       options.Triple = createTargetTriple();
                   else
                       options.Triple = m_parserSettings.m_targetTriple; // "x86_64-unknown-linux-gnuclang"
-				  TargetInfo *targetInfo = TargetInfo::CreateTargetInfo(m_diagnostic, &options);
+				  std::shared_ptr<clang::TargetOptions> options_copy = std::shared_ptr<clang::TargetOptions>(new clang::TargetOptions(options));
+				  TargetInfo *targetInfo = TargetInfo::CreateTargetInfo(m_diagnostic, options_copy);
 
 				  Clang.setTarget(targetInfo);
 				  Clang.createFileManager();
@@ -505,12 +520,13 @@ namespace clang
 				  initializeMacroDefs(Clang.getPreprocessorOpts());
 				  // NB! 
 				  // Препроцессор необходимо создавать только после инициализации свойств языка - LangOptions.
-				  Clang.createPreprocessor();
+				  // TODO: TU_Complete всегда подходит?
+				  Clang.createPreprocessor(TU_Complete);
 
 
 				  initializeIncludePaths(Clang, m_fileToParsePath.c_str(), m_parserSettings, langInfo);
 				  Preprocessor& PP = Clang.getPreprocessor();
-				  PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(), langInfo);
+				  PP.getBuiltinInfo().initializeBuiltins(PP.getIdentifierTable(), langInfo);
 
                   OPS::Reprise::AST2RepriseConverter* pConverter = static_cast<OPS::Reprise::AST2RepriseConverter*>(m_consumer);
                   OPS::ClangParser::PragmaHandlerRegistry::instance().createPragmaHandlers(Clang.getPreprocessor(), pConverter->getPragmas());

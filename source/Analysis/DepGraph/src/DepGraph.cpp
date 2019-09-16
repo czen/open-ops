@@ -31,7 +31,7 @@ using OPS::Console;
 
 static inline void depGraphLog(Console::MessageLevel level, const std::string& message) 
 {
-	OPS::getOutputConsole("DepGraph").log(level, message); 
+	OPS::getOutputConsole("DepGraph", true).log(level, message); 
 }
 
 LoopDesc::LoopDesc(int lower, int upper, int step)
@@ -72,7 +72,7 @@ OccurDesc::OccurDesc(int _occurNumb,const VariableDeclaration* _varDecl,Statemen
 		if (arrayType == 0 && fortranArrayType == 0)
 		{
 			SetStatus(UNKNOWN_BOUNDS);
-			OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph");
+			OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph", true);
 			pConsole->log(OPS::Console::LEVEL_WARNING, _TL("BuildVO: multidim variable is not static array: " + m_varDecl->getName(),
 															"BuildVO: многомерная переменная не является статическим массивом."));
 			//throw OPS::RuntimeError(_TL("Couldn't build occurence description: multidim variable is not static array.","Невозможно построить описание вхождения: многомерная переменная не является статическим массивом."));
@@ -128,7 +128,7 @@ OccurDesc::OccurDesc(int _occurNumb,const VariableDeclaration* _varDecl,Statemen
 					{
 						//m_isIndexesLinear = false;
 						SetStatus(UNKNOWN_BOUNDS);
-						OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph");
+						OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph", true);
 						pConsole->log(OPS::Console::LEVEL_WARNING, _TL("BuildVO: upper bound of array is not const.",
 							"BuildVO: Граница массива непостоянная величина."));
 					}
@@ -142,7 +142,7 @@ OccurDesc::OccurDesc(int _occurNumb,const VariableDeclaration* _varDecl,Statemen
 					{
 						//m_isIndexesLinear = false;
 						SetStatus(UNKNOWN_BOUNDS);
-						OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph");
+						OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph", true);
 						pConsole->log(OPS::Console::LEVEL_WARNING, _TL("BuildVO: lower bound of array is not const.",
 							"BuildVO: Граница массива непостоянная величина."));
 					}
@@ -2061,7 +2061,7 @@ void IndOccurContainer::ParseExpression(ExpressionBase* expr, id& index, EN_Occu
 //простматривает все ExpressionStatment'ы в программе и для каждого вызывает функцию ParseExpression												//===============! Изменить !===================
 void IndOccurContainer::Build(id index, EN_OccurListBuildParams buildParams /* = OLBP_SEARCH_OUTERLOOPS */)
 {
-	OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph");
+	OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph", true);
 	//	pConsole->log(OPS::Console::LEVEL_WARNING, "BuildVO: Test!");
 
 	int numbE = 0;
@@ -2260,7 +2260,7 @@ void LamportGraph::GetAllOccursInArrowsToThisOccur(const ReferenceExpression* pD
 
 int LamportGraph::Refine(EN_RefineMethod refineMethod)
 {
-	OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph");
+	OPS::Console* const pConsole = &OPS::getOutputConsole("DepGraph", true);
 
 	switch(refineMethod)
 	{

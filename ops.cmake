@@ -370,7 +370,7 @@ foreach(config ${configs})
       # message(bingo)
       #
       set(search_path ${${llvm_path_var_name}}/lib)
-      set(module_path ${${llvm_path_var_name}}/share/llvm/cmake)
+      set(module_path ${${llvm_path_var_name}}/lib/cmake/llvm)
       #
     else()
       #
@@ -386,7 +386,7 @@ foreach(config ${configs})
   else()
     #
     set(search_path "${libs_dir}")
-    set(module_path ${OPS_LLVM_DIR}/share/llvm/cmake)
+    set(module_path ${OPS_LLVM_DIR}/lib/cmake/llvm)
     #
   endif()
   #

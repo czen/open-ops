@@ -290,7 +290,7 @@ namespace OPS
 
             std::string EmitCaretDiagnostic(SourceLocation Loc, CharSourceRange *Ranges, 
                 unsigned NumRanges, SourceManager &SM, 
-				const FixItHint *Hints, unsigned NumHints, unsigned Columns) 
+				llvm::ArrayRef<clang::FixItHint> Hints, unsigned NumHints, unsigned Columns) 
             {
                 assert(!Loc.isInvalid() && "must have a valid source location here");
 
@@ -303,7 +303,8 @@ namespace OPS
                 {
                     SourceLocation OneLevelUp = SM.getImmediateExpansionRange(Loc).first;
                     // FIXME: Map ranges?
-                    result += EmitCaretDiagnostic(OneLevelUp, Ranges, NumRanges, SM, 0, 0, Columns);
+                    
+                    result += EmitCaretDiagnostic(OneLevelUp, Ranges, NumRanges, SM, llvm::ArrayRef<clang::FixItHint>(std::vector<clang::FixItHint>()), 0, Columns);
 
                     Loc = SM.getImmediateSpellingLoc(Loc);
 
@@ -413,9 +414,10 @@ namespace OPS
                 std::string FixItInsertionLine;
                 if (true && true) 
                 {
-					for (const FixItHint *Hint = Hints, *LastHint = Hints + NumHints;
-                        Hint != LastHint; ++Hint) 
+                    for (llvm::ArrayRef<clang::FixItHint>::iterator Hint = Hints.begin(); Hint != Hints.end(); Hint++)
                     {
+					//for (const FixItHint *Hint = Hints, *LastHint = Hints + NumHints;
+                    //    Hint != LastHint; ++Hint) 
 						if (Hint->RemoveRange.getBegin().isValid()) 
                         {
                             // We have an insertion hint. Determine whether the inserted

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Reprise/Utils.h"
+#include "Reprise/Reprise.h"
 #include "OPS_Core/MemoryHelper.h"
 
 namespace OPS
@@ -17,8 +18,8 @@ using OPS::Reprise::VariableDeclaration;
 using OPS::Reprise::ExpressionBase;
 using OPS::Reprise::SubroutineDeclaration;
 
-
-class ExpressionBase;
+// WTF?
+//class ExpressionBase;
 
 class PragmaInfo
 {

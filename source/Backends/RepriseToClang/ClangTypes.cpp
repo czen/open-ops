@@ -277,7 +277,8 @@ void TypeWalker::visit(SubroutineType& rSubroutineType)
 	{
 		case SubroutineType::CK_DEFAULT:
 			//
-			callingConv = clang::CC_Default;
+			// TODO: is CC_C calling convention suitable as default?
+			callingConv = clang::CC_C;
 			//
 			break;
 			//

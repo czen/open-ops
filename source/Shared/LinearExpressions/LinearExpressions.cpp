@@ -16,7 +16,7 @@ using namespace OPS::Shared::ExpressionHelpers;
 using namespace std;
 
 #define PARAMETRIC_LINEAR_EXPRESSION_ERROR(message)	\
-			{ OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression"); \
+			{ OPS::Console* const pConsole = &OPS::getOutputConsole("ParametricLinearExpression", true); \
 			pConsole->log(OPS::Console::LEVEL_ERROR, _TL(message,"")); \
 			m_ItIsLinear = false; \
 			return; }

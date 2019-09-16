@@ -8,7 +8,7 @@
 #include "clang/AST/ASTContext.h"
 
 #include "llvm/ADT/IntrusiveRefCntPtr.h"
-#include "llvm/ADT/OwningPtr.h"
+//#include "llvm/ADT/OwningPtr.h"
 #include "OPS_Core/disable_llvm_warnings_end.h"
 
 #include <vector>
@@ -45,7 +45,8 @@ namespace OPS
 
 			namespace Internal
 			{
-				typedef llvm::IntrusiveRefCntPtr <clang::LangOptions>
+				// TODO: is smart ptr necessary here?
+				typedef clang::LangOptions*
 					LangOptionsPtr;
 
 				typedef llvm::IntrusiveRefCntPtr <clang::DiagnosticsEngine>
@@ -60,13 +61,13 @@ namespace OPS
 				typedef llvm::IntrusiveRefCntPtr <clang::TargetInfo>
 					TargetInfoPtr;
 
-				typedef llvm::OwningPtr <clang::IdentifierTable>
+				typedef std::unique_ptr <clang::IdentifierTable>
 					IdentifierTablePtr;
 
-				typedef llvm::OwningPtr <clang::SelectorTable>
+				typedef std::unique_ptr <clang::SelectorTable>
 					SelectorTablePtr;
 
-				typedef llvm::OwningPtr <clang::Builtin::Context>
+				typedef std::unique_ptr <clang::Builtin::Context>
 					BuiltinContextPtr;
 
 				class ASTContextParams

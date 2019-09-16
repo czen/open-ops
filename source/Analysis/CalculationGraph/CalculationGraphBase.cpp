@@ -43,7 +43,7 @@ m_DirEdgeType(DET_NEUTRAL), m_SignalType(SignalType), m_DependenceDistance(DepDi
 		m_Begin = Begin;
 	else
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("NULL pointer in CalculationGraphDirEdge constructor!",""));
 		throw new OPS::ArgumentError("CalculationGraphDirEdge::CalculationGraphDirEdge");
 	}
@@ -52,7 +52,7 @@ m_DirEdgeType(DET_NEUTRAL), m_SignalType(SignalType), m_DependenceDistance(DepDi
 		m_End = End;
 	else
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, _TL("NULL pointer in CalculationGraphDirEdge constructor!",""));
 		throw new OPS::ArgumentError("CalculationGraphDirEdge::CalculationGraphDirEdge");
 	}
@@ -172,7 +172,7 @@ string CalculationGraphNode::getStringRepresentation()
 		return pData->dumpState();
 
 	// Ошибка, тип неопределен
-	OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+	OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 	pConsole->log(OPS::Console::LEVEL_ERROR, _TL("Error during representing a vertex has occured!",""));
 	return "error";
 }

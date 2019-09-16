@@ -224,9 +224,12 @@ void StatementWalker::visit(
 		0 :
 		getClangStmt(m_rASTContext, rBlockElse, m_rR2CDeclNodes));
 
+    // TODO: what VarDecl* and Stmt* Init does this need?
 	clang::IfStmt* pIfStmt = new (m_rASTContext) clang::IfStmt(
 				m_rASTContext,
 				clang::SourceLocation(),
+				false,
+				0,
 				0,
 				pExprCond,
 				pStmtThen,
@@ -269,8 +272,10 @@ void StatementWalker::visit(
 	clang::Expr* pExprCond = getClangExpr(
 		m_rASTContext, rExpressionCond, m_rR2CDeclNodes, true);
 
+    // TODO: what Stmt* Init does this need?
 	clang::SwitchStmt* pSwitchStmt = new (m_rASTContext) clang::SwitchStmt(
 		m_rASTContext,
+		0, 
 		0,	// Reprise does not support variable declaration inside switch condition
 		pExprCond);
 

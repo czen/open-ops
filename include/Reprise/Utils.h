@@ -153,7 +153,7 @@ public:
 
 	inline void addError(const std::string& message)
 	{
-		OPS::getOutputConsole("Reprise").log(OPS::Console::LEVEL_ERROR, message);
+		OPS::getOutputConsole("Reprise", true).log(OPS::Console::LEVEL_ERROR, message);
 	}
 
 private:

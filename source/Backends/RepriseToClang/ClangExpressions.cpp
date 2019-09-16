@@ -698,6 +698,7 @@ void ExprWalker::visit(
 
 					///////////////////
 
+					// TODO: fix other parameters
 					m_pResultExpr = new (m_rASTContext) clang::BinaryOperator(
 						pExprLeft,
 						pExprRight,
@@ -706,7 +707,8 @@ void ExprWalker::visit(
 						clang::VK_RValue,
 						clang::OK_Ordinary,
 						clang::SourceLocation(),
-						false);
+						clang::FPOptions()
+						);
 						
 					break;
 				}

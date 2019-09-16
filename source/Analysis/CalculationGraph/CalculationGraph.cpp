@@ -189,7 +189,7 @@ bool CalculationGraph::loadOperationsDelays(string PathToConfigurationFile)
 	/*}
 	catch (OPSSettings::Except *e) 
 	{
-		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName);
+		OPS::Console* const pConsole = &OPS::getOutputConsole(g_strGraphName, true);
 		pConsole->log(OPS::Console::LEVEL_ERROR, e->m_strErrorMsg + " ("+PathToConfigurationFile+")");
 		return false;
 	}*/

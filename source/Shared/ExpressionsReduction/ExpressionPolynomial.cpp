@@ -247,7 +247,7 @@ SymbolicUnaryOperator::SymbolicUnaryOperator(BasicCallExpression::BuiltinCallKin
 	if (!isCorrect())
 	{
 		m_SubExpression.release();
-		OPS::getOutputConsole("ExpressionPolynomial").log(OPS::Console::LEVEL_ERROR, "Unexprected operator in SymbolicUnaryOperator constructor.");
+		OPS::getOutputConsole("ExpressionPolynomial", true).log(OPS::Console::LEVEL_ERROR, "Unexprected operator in SymbolicUnaryOperator constructor.");
 	}
 }
 
@@ -311,7 +311,7 @@ PriorityMonomial* PriorityMonomial::createPriorityMonomial(const ExpressionBase&
 	}
     catch(const RepriseError& err)
 	{
-		OPS::getOutputConsole("ExpressionPolynomial").log(OPS::Console::LEVEL_ERROR, err.getMessage());
+		OPS::getOutputConsole("ExpressionPolynomial", true).log(OPS::Console::LEVEL_ERROR, err.getMessage());
 		return 0;
 	}
 }

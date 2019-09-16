@@ -49,7 +49,7 @@ const std::string nonApplicableStmts="Программа для которой �
 
 static inline void latticeGraphLog(Console::MessageLevel level, const std::string& message) 
 {
-	OPS::getOutputConsole("LatticeGraph").log(level, message); 
+	OPS::getOutputConsole("LatticeGraph", true).log(level, message); 
 }
 
 
@@ -1699,7 +1699,7 @@ bool ElemLatticeGraph::TestApplicability(OccurDesc* srcEntry, OccurDesc* depEntr
 	if ((srcEntry->IsIndexesLinear() == false) || (depEntry->IsIndexesLinear() == false))
 	{
         //Нелинейные индексные выражения... не работаем в этом случае.
-		//OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph");
+		//OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph", true);
 		//pConsole->log(OPS::Console::LEVEL_WARNING, _TL("The program fragment is not from Linear Class.", nonApplicableLinearClass));
 		return false;
 	}
@@ -1870,7 +1870,7 @@ bool ElemLatticeGraph::TestExternalParamConst()
 ////Проверка, что Id указывает только на фрагмент допустимых операторов (true)
 //bool ElemLatticeGraph::TestAcceptableStmts(id& stmtIndex)
 //{
-//	OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph");
+//	OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph", true);
 //	GetTypeVisitor visitor;
 //	for(StatementBase* currNode = stmtIndex.getThisOper(); currNode; currNode = stmtIndex.next())
 //	{
@@ -1932,7 +1932,7 @@ bool ElemLatticeGraph::TestExternalParamConst()
 // Проверить применимость к фрагменту программы
 bool ElemLatticeGraph::TestFragmentApplicability(id& stmtIndex)
 {
-	//OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph");
+	//OPS::Console* const pConsole = &OPS::getOutputConsole("LatticeGraph", true);
 
 	//Проверим, состоит ли этот фрагмент только из операторов присваивания и циклов For...
 	stmtIndex.reset();

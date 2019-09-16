@@ -25,7 +25,7 @@ ConditionTableMarker::~ConditionTableMarker()
 
 void WriteLog(const std::string& message, OPS::Console::MessageLevel level)
 {
-	getOutputConsole("DepGraphEx").log(level, message);
+	getOutputConsole("DepGraphEx", true).log(level, message);
 }
 
 GlobalConditionTable::ConstIterator GlobalConditionTable::Begin() const
